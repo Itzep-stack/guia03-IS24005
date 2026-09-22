@@ -15,7 +15,18 @@
         <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>11.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <build>
+        <finalName>guia03-IS24005</finalName>
+
         <plugins>
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
