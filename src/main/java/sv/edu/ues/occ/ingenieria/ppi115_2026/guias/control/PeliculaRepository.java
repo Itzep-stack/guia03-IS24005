@@ -50,10 +50,17 @@ public class PeliculaRepository implements Serializable {
     }
 
     public List<Pelicula> listarAccionPost2010() {
-        return Collections.emptyList();
+        return em.createQuery(
+                "SELECT p FROM Pelicula p JOIN p.generos g WHERE g.nombre = 'Acción' AND p.fechaEstreno > :fin2010",
+                Pelicula.class)
+                .setParameter("fin2010", LocalDate.of(2010, 12, 31))
+                .getResultList();
     }
 
     public List<Pelicula> listarDramaMayorA8() {
-        return Collections.emptyList();
+        return em.createQuery(
+                "SELECT p FROM Pelicula p JOIN p.generos g WHERE g.nombre = 'Drama' AND p.calificacion > 8.0",
+                Pelicula.class)
+                .getResultList();
     }
 }
