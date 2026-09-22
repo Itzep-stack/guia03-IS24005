@@ -29,7 +29,7 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarPorChristopherNolan() {
         return em.createQuery(
-                "SELECT p FROM Pelicula p JOIN FETCH p.director d LEFT JOIN FETCH p.generos "
+                "SELECT DISTINCT p FROM Pelicula p JOIN FETCH p.director d LEFT JOIN FETCH p.generos "
                 + "WHERE d.nombres = :nombres AND d.apellidos = :apellidos "
                 + "ORDER BY p.fechaEstreno DESC",
                 Pelicula.class)
@@ -40,7 +40,7 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarAnios2000a2010() {
         return em.createQuery(
-                "SELECT p FROM Pelicula p JOIN FETCH p.director LEFT JOIN FETCH p.generos "
+                "SELECT DISTINCT p FROM Pelicula p JOIN FETCH p.director LEFT JOIN FETCH p.generos "
                 + "WHERE p.fechaEstreno BETWEEN :inicio AND :fin "
                 + "ORDER BY p.fechaEstreno ASC",
                 Pelicula.class)
