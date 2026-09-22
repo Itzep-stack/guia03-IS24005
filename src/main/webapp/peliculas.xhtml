@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+<h:head>
+    <title>Peliculas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .botones { margin-bottom: 20px; }
+        .botones button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
+    </style>
+</h:head>
+<h:body>
+    <h1>Lista de Peliculas</h1>
+
+    <div class="botones">
+        <h:form>
+            <h:commandButton value="Accion post 2010" action="#{peliculaBean.listarAccionPost2010()}" />
+            <h:commandButton value="Drama mayor a 8" action="#{peliculaBean.listarDramaMayorA8()}" />
+            <h:commandButton value="Ver todas" action="#{peliculaBean.listarTodas()}" />
+        </h:form>
+    </div>
+
+    <h:dataTable value="#{peliculaBean.peliculas}" var="p" rendered="#{not empty peliculaBean.peliculas}">
+        <h:column>
+            <f:facet name="header">Titulo</f:facet>
+            #{p.titulo}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Director</f:facet>
+            #{p.director.nombres} #{p.director.apellidos}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Fecha Estreno</f:facet>
+            #{p.fechaEstreno}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Calificacion</f:facet>
+            #{p.calificacion}
+        </h:column>
+    </h:dataTable>
+</h:body>
+</html>
