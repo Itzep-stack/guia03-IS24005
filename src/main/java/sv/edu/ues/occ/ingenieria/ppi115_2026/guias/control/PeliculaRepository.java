@@ -27,12 +27,14 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarCienciaFiccionYSuspense() {
         return em.createQuery("""
-            SELECT p
+            SELECT DISTINCT p
             FROM Pelicula p
-            JOIN p.generos g
-            WHERE g.nombre IN ('Ciencia Ficción', 'Suspense')
-            GROUP BY p
-            HAVING COUNT(DISTINCT g.nombre) = 2
+            JOIN FETCH p.director
+            LEFT JOIN FETCH p.generos
+            WHERE EXISTS (SELECT g1 FROM Pelicula p1 JOIN p1.generos g1
+                          WHERE p1 = p AND g1.nombre = 'Ciencia Ficción')
+              AND EXISTS (SELECT g2 FROM Pelicula p2 JOIN p2.generos g2
+                          WHERE p2 = p AND g2.nombre = 'Suspense')
             ORDER BY p.titulo ASC
             """, Pelicula.class)
             .getResultList();
@@ -40,8 +42,10 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarExcelentes() {
         return em.createQuery("""
-            SELECT p
+            SELECT DISTINCT p
             FROM Pelicula p
+            JOIN FETCH p.director
+            LEFT JOIN FETCH p.generos
             WHERE p.calificacion >= 8.5
             ORDER BY p.calificacion DESC
             """, Pelicula.class)
@@ -72,7 +76,9 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarAccionPost2010() {
         return em.createQuery(
-                "SELECT p FROM Pelicula p JOIN p.generos g WHERE g.nombre = 'Acción' AND p.fechaEstreno > :fin2010",
+                "SELECT DISTINCT p FROM Pelicula p JOIN FETCH p.director LEFT JOIN FETCH p.generos "
+                + "WHERE p.fechaEstreno > :fin2010 AND EXISTS "
+                + "(SELECT g FROM Pelicula p2 JOIN p2.generos g WHERE p2 = p AND g.nombre = 'Acción')",
                 Pelicula.class)
                 .setParameter("fin2010", LocalDate.of(2010, 12, 31))
                 .getResultList();
@@ -80,7 +86,9 @@ public class PeliculaRepository implements Serializable {
 
     public List<Pelicula> listarDramaMayorA8() {
         return em.createQuery(
-                "SELECT p FROM Pelicula p JOIN p.generos g WHERE g.nombre = 'Drama' AND p.calificacion > 8.0",
+                "SELECT DISTINCT p FROM Pelicula p JOIN FETCH p.director LEFT JOIN FETCH p.generos "
+                + "WHERE p.calificacion > 8.0 AND EXISTS "
+                + "(SELECT g FROM Pelicula p2 JOIN p2.generos g WHERE p2 = p AND g.nombre = 'Drama')",
                 Pelicula.class)
                 .getResultList();
     }
