@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core">
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets">
 <h:head>
     <title>Peliculas</title>
     <style>
@@ -19,9 +20,13 @@
 
     <div class="botones">
         <h:form>
+            <h:commandButton value="Mostrar Todas (A-Z)" action="#{peliculaBean.listarTodasOrdenASC()}" />
+            <h:commandButton value="Ciencia Ficcion y Suspense" action="#{peliculaBean.listarCienciaFiccionYSuspense()}" />
+            <h:commandButton value="Excelentes (>= 8.5)" action="#{peliculaBean.listarExcelentes()}" />
+            <h:commandButton value="Christopher Nolan" action="#{peliculaBean.listarPorChristopherNolan()}" />
+            <h:commandButton value="Anios 2000-2010" action="#{peliculaBean.listarAnios2000a2010()}" />
             <h:commandButton value="Accion post 2010" action="#{peliculaBean.listarAccionPost2010()}" />
             <h:commandButton value="Drama mayor a 8" action="#{peliculaBean.listarDramaMayorA8()}" />
-            <h:commandButton value="Ver todas" action="#{peliculaBean.listarTodas()}" />
         </h:form>
     </div>
 
@@ -41,6 +46,10 @@
         <h:column>
             <f:facet name="header">Calificacion</f:facet>
             #{p.calificacion}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Generos</f:facet>
+            <ui:repeat value="#{p.generos}" var="g" varStatus="s">#{g.nombre}#{s.last ? '' : ', '}</ui:repeat>
         </h:column>
     </h:dataTable>
 </h:body>
